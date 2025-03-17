@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kundenregistrierung</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("clientUUID").value = generateUUID();
+    });
+  </script>
+</head>
+<body>
+<header>
+  <h1>Kundenregistrierung</h1>
+</header>
+
+<form action="submit-client.php" method="POST">
+  <input type="hidden" id="clientUUID" name="clientUUID">
+
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="phone">Telefon:</label>
+  <input type="tel" id="phone" name="phone" required>
+
+  <label for="email">E-Mail:</label>
+  <input type="email" id="email" name="email" required>
+
+<!--  <label for="dob">Geburtsdatum:</label>-->
+<!--  <input type="date" id="dob" name="dob" required>-->
+
+  <button type="submit">Registrieren</button>
+</form>
+</body>
+</html>

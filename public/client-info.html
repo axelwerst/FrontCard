@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundeninformation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Пример данных клиента (обычно загружается с сервера)
+        const clientData = {
+            uuid: "550e8400-e29b-41d4-a716-446655440000",
+            name: "Max Mustermann",
+            phone: "+49 123 456 789",
+            email: "max@example.com",
+            dob: "1985-06-15",
+            points: 120,
+            history: [
+                { date: "2025-02-10", reason: "Einkauf", points: 50 },
+                { date: "2025-01-25", reason: "Willkommensbonus", points: 70 }
+            ]
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("clientUUID").textContent = clientData.uuid;
+            document.getElementById("clientName").textContent = clientData.name;
+            document.getElementById("clientPhone").textContent = clientData.phone;
+            document.getElementById("clientEmail").textContent = clientData.email;
+            document.getElementById("clientDob").textContent = clientData.dob;
+            document.getElementById("clientPoints").textContent = clientData.points;
+
+            const historyTable = document.getElementById("pointsHistory");
+            clientData.history.forEach(entry => {
+                let row = historyTable.insertRow();
+                row.insertCell(0).textContent = entry.date;
+                row.insertCell(1).textContent = entry.reason;
+                row.insertCell(2).textContent = entry.points;
+            });
+        });
+
+        function updatePoints(action) {
+            let pointsInput = document.getElementById("pointsInput").value;
+            let reasonInput = document.getElementById("reasonInput").value;
+
+            if (!pointsInput || !reasonInput) {
+                alert("Bitte geben Sie Punkte und einen Grund ein.");
+                return;
+            }
+
+            let points = parseInt(pointsInput);
+            if (action === "subtract") points = -points;
+
+            clientData.points += points;
+            clientData.history.unshift({
+                date: new Date().toISOString().split("T")[0],
+                reason: reasonInput,
+                points: points
+            });
+
+            document.getElementById("clientPoints").textContent = clientData.points;
+            let newRow = document.getElementById("pointsHistory").insertRow(1);
+            newRow.insertCell(0).textContent = new Date().toISOString().split("T")[0];
+            newRow.insertCell(1).textContent = reasonInput;
+            newRow.insertCell(2).textContent = points;
+        }
+    </script>
+</head>
+<body>
+<header>
+    <h1>Kundeninformation</h1>
+</header>
+
+<section>
+    <h2>Persönliche Daten</h2>
+    <p><strong>ID:</strong> <span id="clientUUID"></span></p>
+    <p><strong>Name:</strong> <span id="clientName"></span></p>
+    <p><strong>Telefon:</strong> <span id="clientPhone"></span></p>
+    <p><strong>E-Mail:</strong> <span id="clientEmail"></span></p>
+<!--    <p><strong>Geburtsdatum:</strong> <span id="clientDob"></span></p>-->
+</section>
+
+<section>
+    <h2>Bonuspunkte</h2>
+    <p><strong>Aktuelle Punkte:</strong> <span id="clientPoints"></span></p>
+    <table>
+        <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Grund</th>
+            <th>Punkte</th>
+        </tr>
+        </thead>
+        <tbody id="pointsHistory">
+        <tr><td colspan="3">Lade Daten...</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Punkte hinzufügen / entfernen</h3>
+    <label for="pointsInput">Punkte:</label>
+    <input type="number" id="pointsInput">
+    <label for="reasonInput">Grund:</label>
+    <input type="text" id="reasonInput">
+    <button onclick="updatePoints('add')">Punkte hinzufügen</button>
+    <button onclick="updatePoints('subtract')">Punkte entfernen</button>
+</section>
+</body>
+</html>
