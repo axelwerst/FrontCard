@@ -10,6 +10,13 @@
 <header>
     <h1>Kundenkarte scannen</h1>
 </header>
+
 <p>Hier können Sie eine Kundenkarte scannen, um Informationen zu finden.</p>
-</body>
+
+<label for="uuidInput">Kunden-UUID eingeben:</label>
+<input type="text" id="uuidInput" placeholder="Geben Sie die UUID ein">
+<button onclick="searchCustomer()">Suchen</button>
+
+<div id="customerInfo"></div>
+<script src="js/scan-client.js"></script>    
 </html>

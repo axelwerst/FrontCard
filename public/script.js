@@ -45,9 +45,15 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function changeLanguage(lang) {
+        if (!translations[lang]) return; // Проверяем, есть ли такой язык
+
         document.querySelectorAll("[data-lang]").forEach(el => {
-            el.innerHTML = translations[lang][el.dataset.lang];
+            const key = el.dataset.lang;
+            if (translations[lang][key]) {
+                el.innerHTML = translations[lang][key];
+            }
         });
+
         localStorage.setItem("selectedLang", lang); // Сохраняем выбор языка
     }
 
@@ -55,13 +61,76 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedLang = localStorage.getItem("selectedLang") || "de";
     changeLanguage(savedLang);
 
-    // Проверяем, есть ли на странице переключатель языка
+    // Если есть переключатель языка — добавляем обработчик
     const langSwitcher = document.getElementById("languageSwitcher");
-
     if (langSwitcher) {
-        langSwitcher.value = savedLang; // Устанавливаем сохраненный язык в select
+        langSwitcher.value = savedLang; // Устанавливаем сохраненный язык
         langSwitcher.addEventListener("change", function () {
             changeLanguage(langSwitcher.value);
         });
     }
+
+    // Обработка формы регистрации
+    const form = document.getElementById("registrationForm");
+    if (form) {
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Отключаем стандартную отправку формы
+
+            const name = document.getElementById("name").value;
+            const position = document.getElementById("position").value;
+            const email = document.getElementById("email").value;
+            const confirmEmail = document.getElementById("confirm_email").value;
+
+            if (email !== confirmEmail) {
+                alert(translations[savedLang]["confirm_email"] + " stimmt nicht überein!");
+                return;
+            }
+
+            const requestData = { name, position, email };
+
+            try {
+                const response = await fetch("http://localhost:8080/api/employees/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (response.ok) {
+                    alert(translations[savedLang]["submit"] + " erfolgreich!");
+                    form.reset();
+                } else {
+                    const errorData = await response.json();
+                    alert("Fehler: " + errorData.message);
+                }
+            } catch (error) {
+                console.error("Fehler:", error);
+                alert("Ein Fehler ist aufgetreten.");
+            }
+        });
+    }
+    fetch('http://localhost:8080/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            position: position,
+            email: email,
+            confirmEmail: confirmEmail,
+            password: password
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();  // Преобразуем в JSON только если статус OK
+        })
+        .then(data => {
+            console.log('Успех:', data);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
 });

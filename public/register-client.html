@@ -5,18 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kundenregistrierung</title>
   <link rel="stylesheet" href="styles.css">
-  <script>
-    function generateUUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
 
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("clientUUID").value = generateUUID();
-    });
-  </script>
 </head>
 <body>
 <header>
@@ -40,5 +29,6 @@
 
   <button type="submit">Registrieren</button>
 </form>
+<script src="js/register-client.js"></script>
 </body>
 </html>
