@@ -1,6 +1,6 @@
 const token = localStorage.getItem("JWT");
 if (token != null) {
-    localStorage.href = "/scan-client.html";
+    localStorage.href = "/public/scan-client.html";
 }
 const registerForm: Element = document.querySelector("#registerForm");
 
@@ -40,7 +40,7 @@ async function register() {
 };
 if (response.ok) {
     alert("Register Successful!");
-    location.href = "scan-client.html";
+    location.href = "/public/scan-client.html";
 } else {
     alert("Register failed.");
 }

@@ -1,8 +1,9 @@
 const token = localStorage.getItem("JWT");
 
 if (token != null) {
-    location.href = "/people.html";
+    location.href = "/public/employee-dashboard.html";
 }
+
 
 const loginForm = document.querySelector("#loginForm");
 
@@ -25,7 +26,7 @@ async function login() {
         password: password,
     };
 
-    const response = await fetch("https://academy-classroom-backend-0xay.onrender.com/login", {
+    const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -40,7 +41,7 @@ async function login() {
         localStorage.setItem("JWT", data.token);
 
         alert("Login Successful!");
-        location.href = "employee-dashboard.html";
+        location.href = "/public/employee-dashboard.html";
     } else {
         alert("Login Failed!");
     }

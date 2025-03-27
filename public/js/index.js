@@ -1,5 +1,5 @@
 const token = localStorage.getItem("JWT");
 
 if (token != null) {
-    location.href = "/people.html";
+    location.href = "/public/employee-dashboard.js";
 }
